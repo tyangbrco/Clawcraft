@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="ClawCraft — Master AI agents with OpenClaw. Courses, premium skills, templates, 1-on-1 coaching, and custom agent builds." />
+  <meta name="keywords" content="OpenClaw, AI agents, automation, skills, course, templates, custom agents" />
+  <meta property="og:title" content="ClawCraft — Master AI Agents with OpenClaw" />
+  <meta property="og:description" content="Courses, premium skills, templates, 1-on-1 setup sessions, and custom agent builds for OpenClaw users." />
+  <meta property="og:type" content="website" />
+  <title>ClawCraft — Master AI Agents with OpenClaw</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #080c14;
+      --bg2: #0d1421;
+      --bg3: #111927;
+      --card: #131d2e;
+      --border: #1e2d42;
+      --accent: #00c9ff;
+      --accent2: #0084ff;
+      --accent-glow: rgba(0, 201, 255, 0.15);
+      --text: #e8edf5;
+      --text-muted: #7a8fa8;
+      --text-dim: #4a6080;
+      --green: #00e676;
+      --radius: 12px;
+      --radius-lg: 20px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5%;
+      height: 68px;
+      background: rgba(8, 12, 20, 0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      transition: background 0.3s;
+    }
+    .logo {
+      font-size: 1.4rem; font-weight: 800; letter-spacing: -0.5px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .logo span { font-family: 'JetBrains Mono', monospace; font-size: 1.1em; }
+    .nav-links { display: flex; gap: 2rem; list-style: none; align-items: center; }
+    .nav-links a { color: var(--text-muted); font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--accent); text-decoration: none; }
+    .nav-cta {
+      background: linear-gradient(135deg, var(--accent2), var(--accent));
+      color: #000 !important; padding: 0.5rem 1.25rem;
+      border-radius: 8px; font-weight: 700 !important; font-size: 0.85rem !important;
+    }
+    .nav-cta:hover { opacity: 0.9; }
+
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+    .hamburger span { width: 24px; height: 2px; background: var(--text); border-radius: 2px; transition: all 0.3s; }
+    .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+    .mobile-menu {
+      display: none; position: fixed; top: 68px; left: 0; right: 0;
+      background: var(--bg2); border-bottom: 1px solid var(--border);
+      padding: 1.5rem 5%; z-index: 99;
+    }
+    .mobile-menu.open { display: block; }
+    .mobile-menu ul { list-style: none; display: flex; flex-direction: column; gap: 1.2rem; }
+    .mobile-menu a { color: var(--text); font-size: 1rem; font-weight: 500; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      text-align: center; padding: 8rem 5% 5rem;
+      position: relative; overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0, 132, 255, 0.12) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 40% at 80% 80%, rgba(0, 201, 255, 0.07) 0%, transparent 60%);
+    }
+    .hero-grid {
+      position: absolute; inset: 0; z-index: 0;
+      background-image: linear-gradient(var(--border) 1px, transparent 1px),
+                        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 60px 60px;
+      opacity: 0.2;
+      mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black, transparent);
+    }
+    .hero-content { position: relative; z-index: 1; max-width: 860px; margin: 0 auto; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: rgba(0, 201, 255, 0.1); border: 1px solid rgba(0, 201, 255, 0.3);
+      color: var(--accent); padding: 0.4rem 1rem; border-radius: 50px;
+      font-size: 0.8rem; font-weight: 600; letter-spacing: 0.5px;
+      margin-bottom: 2rem; text-transform: uppercase;
+    }
+    .hero-badge::before { content: '⚡'; }
+    h1 {
+      font-size: clamp(2.8rem, 6vw, 5rem); font-weight: 900;
+      line-height: 1.05; letter-spacing: -2px; margin-bottom: 1.5rem;
+    }
+    h1 .gradient {
+      background: linear-gradient(135deg, #fff 0%, var(--accent) 50%, var(--accent2) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .hero-sub {
+      font-size: clamp(1rem, 2vw, 1.25rem); color: var(--text-muted);
+      max-width: 580px; margin: 0 auto 2.5rem; line-height: 1.7;
+    }
+    .hero-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.85rem 2rem; border-radius: 10px;
+      font-weight: 700; font-size: 0.95rem; cursor: pointer;
+      transition: all 0.2s; border: none; text-decoration: none !important;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent2), var(--accent));
+      color: #000;
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0, 201, 255, 0.35); }
+    .btn-secondary {
+      background: transparent; color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+
+    .hero-stats {
+      display: flex; justify-content: center; gap: 3rem;
+      margin-top: 4rem; padding-top: 3rem;
+      border-top: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+    .stat { text-align: center; }
+    .stat-num { font-size: 2rem; font-weight: 800; color: var(--accent); display: block; }
+    .stat-label { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+
+    /* ── SECTIONS ── */
+    section { padding: 6rem 5%; }
+    .section-label {
+      text-align: center; margin-bottom: 1rem;
+      font-size: 0.75rem; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--accent);
+    }
+    h2 {
+      text-align: center; font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 800; letter-spacing: -1px; margin-bottom: 1rem;
+    }
+    .section-sub {
+      text-align: center; color: var(--text-muted);
+      font-size: 1rem; max-width: 520px; margin: 0 auto 3.5rem;
+    }
+
+    /* ── PRODUCTS ── */
+    #products { background: var(--bg2); }
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      max-width: 1200px; margin: 0 auto;
+    }
+    .product-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); padding: 2rem;
+      transition: all 0.3s; position: relative; overflow: hidden;
+      opacity: 0; transform: translateY(30px);
+    }
+    .product-card.visible { opacity: 1; transform: translateY(0); }
+    .product-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--accent2), var(--accent));
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .product-card:hover { border-color: rgba(0, 201, 255, 0.3); transform: translateY(-4px); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4); }
+    .product-card:hover::before { opacity: 1; }
+    .product-card.featured {
+      border-color: rgba(0, 201, 255, 0.4);
+      background: linear-gradient(135deg, #131d2e 0%, #0d1829 100%);
+    }
+    .product-card.featured::before { opacity: 1; }
+    .featured-badge {
+      position: absolute; top: 1rem; right: 1rem;
+      background: linear-gradient(135deg, var(--accent2), var(--accent));
+      color: #000; font-size: 0.7rem; font-weight: 700;
+      padding: 0.25rem 0.75rem; border-radius: 50px;
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .product-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+    .product-price {
+      font-size: 2rem; font-weight: 800; color: var(--accent);
+      margin-bottom: 0.25rem;
+    }
+    .product-price span { font-size: 1rem; font-weight: 500; color: var(--text-muted); }
+    .product-title { font-size: 1.15rem; font-weight: 700; margin-bottom: 0.75rem; }
+    .product-desc { color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; margin-bottom: 1.25rem; }
+    .product-features { list-style: none; margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 0.4rem; }
+    .product-features li {
+      font-size: 0.85rem; color: var(--text-muted);
+      display: flex; align-items: flex-start; gap: 0.5rem;
+    }
+    .product-features li::before { content: '✓'; color: var(--green); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+    .card-btn {
+      display: block; text-align: center; width: 100%;
+      padding: 0.75rem; border-radius: 8px; font-weight: 700; font-size: 0.9rem;
+      background: linear-gradient(135deg, var(--accent2), var(--accent));
+      color: #000; cursor: pointer; transition: all 0.2s;
+      text-decoration: none !important; border: none;
+    }
+    .card-btn:hover { opacity: 0.9; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0, 201, 255, 0.3); }
+    .card-btn-outline {
+      background: transparent; color: var(--accent);
+      border: 1px solid rgba(0, 201, 255, 0.4);
+    }
+    .card-btn-outline:hover { background: rgba(0, 201, 255, 0.1); transform: translateY(-1px); }
+
+    /* ── HOW IT WORKS ── */
+    #how { background: var(--bg); }
+    .steps { display: flex; flex-direction: column; gap: 0; max-width: 700px; margin: 0 auto; }
+    .step {
+      display: flex; gap: 2rem; padding: 2rem 0;
+      border-left: 2px solid var(--border); padding-left: 2rem; position: relative;
+      opacity: 0; transform: translateX(-20px); transition: all 0.5s;
+    }
+    .step.visible { opacity: 1; transform: translateX(0); }
+    .step:last-child { border-left-color: transparent; }
+    .step-num {
+      position: absolute; left: -1.1rem;
+      width: 2rem; height: 2rem; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent2), var(--accent));
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 0.85rem; color: #000; flex-shrink: 0;
+    }
+    .step-content h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .step-content p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; }
+
+    /* ── TESTIMONIALS ── */
+    #testimonials { background: var(--bg2); }
+    .testimonials-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem; max-width: 1100px; margin: 0 auto;
+    }
+    .testimonial-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); padding: 2rem;
+      opacity: 0; transform: translateY(20px); transition: all 0.5s;
+    }
+    .testimonial-card.visible { opacity: 1; transform: translateY(0); }
+    .testimonial-card:hover { border-color: rgba(0, 201, 255, 0.25); }
+    .stars { color: #ffd700; font-size: 0.9rem; letter-spacing: 2px; margin-bottom: 1rem; }
+    .testimonial-text { color: var(--text-muted); font-size: 0.95rem; line-height: 1.7; margin-bottom: 1.5rem; font-style: italic; }
+    .testimonial-author { display: flex; align-items: center; gap: 0.75rem; }
+    .avatar {
+      width: 42px; height: 42px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; flex-shrink: 0;
+    }
+    .avatar-1 { background: linear-gradient(135deg, #667eea, #764ba2); }
+    .avatar-2 { background: linear-gradient(135deg, #f093fb, #f5576c); }
+    .avatar-3 { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+    .author-name { font-weight: 700; font-size: 0.9rem; }
+    .author-role { font-size: 0.8rem; color: var(--text-dim); }
+
+    /* ── FAQ ── */
+    #faq { background: var(--bg); }
+    .faq-list { max-width: 720px; margin: 0 auto; display: flex; flex-direction: column; gap: 0.75rem; }
+    .faq-item {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); overflow: hidden;
+      transition: border-color 0.2s;
+    }
+    .faq-item.open { border-color: rgba(0, 201, 255, 0.35); }
+    .faq-q {
+      width: 100%; background: transparent; border: none;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.25rem 1.5rem; cursor: pointer; color: var(--text);
+      font-size: 0.95rem; font-weight: 600; text-align: left; gap: 1rem;
+      font-family: inherit;
+    }
+    .faq-q:hover { color: var(--accent); }
+    .faq-icon {
+      width: 22px; height: 22px; border-radius: 50%;
+      background: rgba(0, 201, 255, 0.1); display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; transition: transform 0.3s, background 0.2s;
+      font-size: 0.75rem; color: var(--accent);
+    }
+    .faq-item.open .faq-icon { transform: rotate(45deg); background: rgba(0, 201, 255, 0.2); }
+    .faq-a {
+      max-height: 0; overflow: hidden; transition: max-height 0.35s ease, padding 0.35s;
+      color: var(--text-muted); font-size: 0.9rem; line-height: 1.7;
+      padding: 0 1.5rem;
+    }
+    .faq-item.open .faq-a { max-height: 300px; padding: 0 1.5rem 1.25rem; }
+
+    /* ── CONTACT ── */
+    #contact { background: var(--bg2); }
+    .contact-wrapper {
+      max-width: 680px; margin: 0 auto;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); padding: 3rem;
+    }
+    .form-group { margin-bottom: 1.25rem; }
+    label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-muted); }
+    input, textarea, select {
+      width: 100%; background: var(--bg3); border: 1px solid var(--border);
+      border-radius: 8px; padding: 0.85rem 1rem; color: var(--text);
+      font-size: 0.95rem; font-family: inherit; outline: none; transition: border-color 0.2s;
+    }
+    input:focus, textarea:focus, select:focus { border-color: var(--accent); }
+    input.error, textarea.error, select.error { border-color: #ff4444; }
+    textarea { resize: vertical; min-height: 120px; }
+    select option { background: var(--bg3); }
+    .error-msg { color: #ff6666; font-size: 0.8rem; margin-top: 0.35rem; display: none; }
+    .error-msg.show { display: block; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .submit-btn {
+      width: 100%; padding: 1rem;
+      background: linear-gradient(135deg, var(--accent2), var(--accent));
+      color: #000; border: none; border-radius: 10px;
+      font-size: 1rem; font-weight: 700; cursor: pointer;
+      transition: all 0.2s; margin-top: 0.5rem; font-family: inherit;
+    }
+    .submit-btn:hover { opacity: 0.9; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(0, 201, 255, 0.3); }
+    .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    .form-success {
+      text-align: center; padding: 3rem; display: none;
+    }
+    .form-success.show { display: block; }
+    .form-success-icon { font-size: 3rem; margin-bottom: 1rem; }
+    .form-success h3 { font-size: 1.4rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .form-success p { color: var(--text-muted); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--bg); border-top: 1px solid var(--border);
+      padding: 3rem 5% 2rem;
+    }
+    .footer-top {
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 3rem; margin-bottom: 3rem;
+    }
+    .footer-brand p { color: var(--text-muted); font-size: 0.9rem; margin-top: 1rem; line-height: 1.6; max-width: 280px; }
+    .footer-col h4 { font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem; color: var(--text); }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+    .footer-col a { color: var(--text-muted); font-size: 0.9rem; transition: color 0.2s; }
+    .footer-col a:hover { color: var(--accent); text-decoration: none; }
+    .social-links { display: flex; gap: 0.75rem; margin-top: 1.25rem; }
+    .social-link {
+      width: 36px; height: 36px; border-radius: 8px;
+      background: var(--bg3); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; transition: all 0.2s; color: var(--text-muted);
+      text-decoration: none;
+    }
+    .social-link:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+    .footer-bottom {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-top: 2rem; border-top: 1px solid var(--border);
+      font-size: 0.85rem; color: var(--text-dim); flex-wrap: wrap; gap: 1rem;
+    }
+    .footer-bottom a { color: var(--text-dim); }
+    .footer-bottom a:hover { color: var(--accent); }
+    .powered { display: flex; align-items: center; gap: 0.4rem; }
+
+    /* ── SCROLL TO TOP ── */
+    #scrollTop {
+      position: fixed; bottom: 2rem; right: 2rem; z-index: 50;
+      width: 44px; height: 44px; border-radius: 12px;
+      background: linear-gradient(135deg, var(--accent2), var(--accent));
+      border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; color: #000; box-shadow: 0 4px 20px rgba(0, 201, 255, 0.3);
+      opacity: 0; transform: translateY(20px);
+      transition: all 0.3s; pointer-events: none;
+    }
+    #scrollTop.show { opacity: 1; transform: translateY(0); pointer-events: all; }
+    #scrollTop:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0, 201, 255, 0.45); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .footer-top { grid-template-columns: 1fr 1fr; gap: 2rem; }
+    }
+    @media (max-width: 700px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .form-row { grid-template-columns: 1fr; }
+      .hero-stats { gap: 2rem; }
+      .contact-wrapper { padding: 2rem 1.5rem; }
+      .footer-top { grid-template-columns: 1fr; gap: 1.5rem; }
+    }
+    @media (max-width: 480px) {
+      section { padding: 4rem 4%; }
+      h1 { letter-spacing: -1px; }
+      .hero-actions { flex-direction: column; align-items: center; }
+      .btn { width: 100%; justify-content: center; }
+    }
+
+    /* transitions for animated cards */
+    .product-card { transition: opacity 0.5s ease, transform 0.5s ease, border-color 0.3s, box-shadow 0.3s; }
+    .product-card:hover { transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s; }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <div class="logo"><span>⚙</span> ClawCraft</div>
+  <ul class="nav-links">
+    <li><a href="#products">Products</a></li>
+    <li><a href="#how">How It Works</a></li>
+    <li><a href="#testimonials">Reviews</a></li>
+    <li><a href="#faq">FAQ</a></li>
+    <li><a href="#contact" class="nav-cta">Get Started</a></li>
+  </ul>
+  <div class="hamburger" id="hamburger" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <ul>
+    <li><a href="#products" class="mobile-link">Products</a></li>
+    <li><a href="#how" class="mobile-link">How It Works</a></li>
+    <li><a href="#testimonials" class="mobile-link">Reviews</a></li>
+    <li><a href="#faq" class="mobile-link">FAQ</a></li>
+    <li><a href="#contact" class="mobile-link">Get Started →</a></li>
+  </ul>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-badge">OpenClaw Experts</div>
+    <h1>
+      Master AI Agents.<br>
+      <span class="gradient">Automate Everything.</span>
+    </h1>
+    <p class="hero-sub">
+      Stop wrestling with configs and broken scripts. ClawCraft gives you the skills, templates, and expert guidance to turn OpenClaw into your most powerful tool.
+    </p>
+    <div class="hero-actions">
+      <a href="#products" class="btn btn-primary">Browse Products ↓</a>
+      <a href="#contact" class="btn btn-secondary">Talk to an Expert</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-num">500+</span><span class="stat-label">Agents Built</span></div>
+      <div class="stat"><span class="stat-num">200+</span><span class="stat-label">Students</span></div>
+      <div class="stat"><span class="stat-num">50+</span><span class="stat-label">Skills Published</span></div>
+      <div class="stat"><span class="stat-num">4.9★</span><span class="stat-label">Avg Rating</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+<section id="products">
+  <p class="section-label">What We Offer</p>
+  <h2>Everything You Need to Win with OpenClaw</h2>
+  <p class="section-sub">From beginner to power user — pick what fits your stage.</p>
+  <div class="products-grid">
+
+    <!-- Course -->
+    <div class="product-card featured">
+      <div class="featured-badge">Most Popular</div>
+      <div class="product-icon">🎓</div>
+      <div class="product-price">$97 <span>one-time</span></div>
+      <div class="product-title">OpenClaw Mastery Course</div>
+      <p class="product-desc">Go from zero to power user. A complete, structured curriculum covering everything you need to build production-grade AI agents.</p>
+      <ul class="product-features">
+        <li>Setup & Configuration deep-dive</li>
+        <li>Skills system & automation workflows</li>
+        <li>Sub-agents & orchestration</li>
+        <li>Cron scheduling & heartbeats</li>
+        <li>Browser automation (xdotool, Playwright)</li>
+        <li>API integrations & custom tools</li>
+        <li>Lifetime access + updates</li>
+      </ul>
+      <a href="#contact" class="card-btn" onclick="prefillForm('Course')">Enroll Now →</a>
+    </div>
+
+    <!-- Skills Pack -->
+    <div class="product-card">
+      <div class="product-icon">⚡</div>
+      <div class="product-price">$29 <span>one-time</span></div>
+      <div class="product-title">Premium Skills Pack</div>
+      <p class="product-desc">Production-ready skills built to drop straight into your OpenClaw setup. No guesswork, no debugging from scratch.</p>
+      <ul class="product-features">
+        <li>Email automation & monitoring</li>
+        <li>Social media posting pipelines</li>
+        <li>Finance tracking & alerts</li>
+        <li>Weather & scheduling skills</li>
+        <li>Security & system healthchecks</li>
+        <li>Full documentation included</li>
+      </ul>
+      <a href="#contact" class="card-btn card-btn-outline" onclick="prefillForm('Skills Pack')">Get Skills Pack →</a>
+    </div>
+
+    <!-- Templates -->
+    <div class="product-card">
+      <div class="product-icon">📋</div>
+      <div class="product-price">$19 <span>one-time</span></div>
+      <div class="product-title">Template Starter Kit</div>
+      <p class="product-desc">Go from a blank config to a fully working agent setup in 10 minutes. Battle-tested templates used by real deployments.</p>
+      <ul class="product-features">
+        <li>AGENTS.md starter template</li>
+        <li>SOUL.md personality config</li>
+        <li>HEARTBEAT.md setup patterns</li>
+        <li>MEMORY.md structure guide</li>
+        <li>Example cron configurations</li>
+        <li>5 ready-to-use workflow configs</li>
+      </ul>
+      <a href="#contact" class="card-btn card-btn-outline" onclick="prefillForm('Template Kit')">Download Kit →</a>
+    </div>
+
+    <!-- 1-on-1 -->
+    <div class="product-card">
+      <div class="product-icon">🎯</div>
+      <div class="product-price">$99 <span>/ session</span></div>
+      <div class="product-title">1-on-1 Setup Session</div>
+      <p class="product-desc">Personal video call with an OpenClaw expert. We'll get your setup working, debug your issues, and build your first automation together.</p>
+      <ul class="product-features">
+        <li>60-minute video call</li>
+        <li>Live setup & troubleshooting</li>
+        <li>Custom workflow design</li>
+        <li>Session recording provided</li>
+        <li>1 week follow-up support</li>
+      </ul>
+      <a href="#contact" class="card-btn card-btn-outline" onclick="prefillForm('Setup Session')">Book a Session →</a>
+    </div>
+
+    <!-- Custom Build -->
+    <div class="product-card">
+      <div class="product-icon">🏗️</div>
+      <div class="product-price">$299+ <span>per project</span></div>
+      <div class="product-title">Custom Agent Build</div>
+      <p class="product-desc">You tell us what you need, we build it. Fully custom agent setups, skills, and automations tailored to your exact use case.</p>
+      <ul class="product-features">
+        <li>Discovery call included</li>
+        <li>Fully custom skill development</li>
+        <li>Business & content automation</li>
+        <li>Sub-agent orchestration systems</li>
+        <li>Deployment & handoff support</li>
+        <li>30-day post-delivery support</li>
+      </ul>
+      <a href="#contact" class="card-btn" onclick="prefillForm('Custom Build')">Request a Quote →</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <p class="section-label">The Process</p>
+  <h2>How ClawCraft Works</h2>
+  <p class="section-sub">Simple, fast, and designed so you actually succeed.</p>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <h3>Pick Your Product</h3>
+        <p>Choose what fits where you are — a template kit to get started, the course to go deep, or a custom build if you need it done for you.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <h3>Get Instant Access</h3>
+        <p>Digital products are delivered immediately after purchase. For sessions and custom builds, we'll schedule a kickoff within 24 hours.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <h3>Build & Automate</h3>
+        <p>Follow the guides, run the templates, or let us build it for you. Either way, you end up with a working, production-grade agent setup.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <h3>Ship & Scale</h3>
+        <p>Your agents run 24/7. You iterate with confidence. Join the community and keep building.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+  <p class="section-label">Social Proof</p>
+  <h2>What People Are Saying</h2>
+  <p class="section-sub">Real feedback from real OpenClaw users we've helped.</p>
+  <div class="testimonials-grid">
+    <div class="testimonial-card">
+      <div class="stars">★★★★★</div>
+      <p class="testimonial-text">"I spent 3 days trying to get my first skill working. After buying the Template Kit, I had a fully functional agent setup running in under an hour. Absolutely worth it."</p>
+      <div class="testimonial-author">
+        <div class="avatar avatar-1">👨‍💻</div>
+        <div>
+          <div class="author-name">Alex M.</div>
+          <div class="author-role">Indie Developer</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card">
+      <div class="stars">★★★★★</div>
+      <p class="testimonial-text">"The 1-on-1 session was a game changer. We set up my entire social media automation pipeline in one call. Mark is now posting every day without me touching anything."</p>
+      <div class="testimonial-author">
+        <div class="avatar avatar-2">👩‍🚀</div>
+        <div>
+          <div class="author-name">Sarah K.</div>
+          <div class="author-role">Content Creator</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card">
+      <div class="stars">★★★★★</div>
+      <p class="testimonial-text">"We hired ClawCraft to build a custom monitoring agent for our SaaS. They delivered in a week — way beyond what we expected. The agent catches issues before our customers do."</p>
+      <div class="testimonial-author">
+        <div class="avatar avatar-3">👨‍🔧</div>
+        <div>
+          <div class="author-name">Jordan T.</div>
+          <div class="author-role">Startup Founder</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <p class="section-label">Questions</p>
+  <h2>Frequently Asked Questions</h2>
+  <p class="section-sub">Everything you need to know before getting started.</p>
+  <div class="faq-list">
+    <div class="faq-item">
+      <button class="faq-q" aria-expanded="false">
+        What is OpenClaw?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">OpenClaw is a personal AI agent platform that runs on your own hardware. It lets you create AI agents that can browse the web, send messages, run automations, manage files, schedule tasks, and much more — all privately, on your own server or machine.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" aria-expanded="false">
+        Do I need technical experience to get started?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">Not necessarily. The Template Starter Kit is designed for anyone who can follow instructions. If you're completely new, we recommend booking a 1-on-1 Setup Session where we'll walk you through everything live. The Mastery Course covers both beginner and advanced concepts.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" aria-expanded="false">
+        What's included in the Mastery Course?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">The course covers: initial setup & configuration, the OpenClaw skills system, creating and deploying sub-agents, scheduling tasks with cron and heartbeats, browser automation, connecting to external APIs, and building production-grade workflows. You get lifetime access and all future updates.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" aria-expanded="false">
+        Can I get a refund if it's not for me?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">Yes. All digital products come with a 7-day money-back guarantee, no questions asked. For 1-on-1 sessions, cancellations more than 24 hours before the scheduled time are fully refunded. Custom builds are covered by a satisfaction guarantee — we iterate until you're happy.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" aria-expanded="false">
+        How does the 1-on-1 Setup Session work?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">After booking, you'll receive a calendar link to choose a time slot. We'll meet via video call (Google Meet or Zoom) for 60 minutes. Come with your OpenClaw installation ready (or we can set it up together) and a list of what you want to build. You'll receive a recording of the session afterward.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" aria-expanded="false">
+        What can custom agents actually do?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">Almost anything. Real examples we've built: social media automation pipelines, email monitoring & auto-response, financial portfolio tracking, customer support bots, content generation systems, server monitoring, lead generation automations, and personal productivity setups. If it can be described, we can usually build it.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <p class="section-label">Contact</p>
+  <h2>Get in Touch</h2>
+  <p class="section-sub">Ready to get started, or just have questions? Drop us a message.</p>
+  <div class="contact-wrapper">
+    <form id="contactForm" novalidate>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="fname">First Name *</label>
+          <input type="text" id="fname" name="fname" placeholder="Alex" />
+          <div class="error-msg" id="fname-err">Please enter your name.</div>
+        </div>
+        <div class="form-group">
+          <label for="email">Email Address *</label>
+          <input type="email" id="email" name="email" placeholder="alex@example.com" />
+          <div class="error-msg" id="email-err">Please enter a valid email.</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="interest">I'm interested in... *</label>
+        <select id="interest" name="interest">
+          <option value="">— Select a product —</option>
+          <option value="Course">OpenClaw Mastery Course ($97)</option>
+          <option value="Skills Pack">Premium Skills Pack ($29)</option>
+          <option value="Template Kit">Template Starter Kit ($19)</option>
+          <option value="Setup Session">1-on-1 Setup Session ($99)</option>
+          <option value="Custom Build">Custom Agent Build ($299+)</option>
+          <option value="Other">Other / General Question</option>
+        </select>
+        <div class="error-msg" id="interest-err">Please select an option.</div>
+      </div>
+      <div class="form-group">
+        <label for="message">Message *</label>
+        <textarea id="message" name="message" placeholder="Tell us a bit about what you're trying to build or any questions you have..."></textarea>
+        <div class="error-msg" id="message-err">Please write a brief message.</div>
+      </div>
+      <button type="submit" class="submit-btn" id="submitBtn">Send Message →</button>
+    </form>
+    <div class="form-success" id="formSuccess">
+      <div class="form-success-icon">🎉</div>
+      <h3>Message sent!</h3>
+      <p>We'll get back to you within 24 hours. Keep an eye on your inbox.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="logo" style="font-size:1.2rem"><span>⚙</span> ClawCraft</div>
+      <p>Helping OpenClaw users build smarter, faster, and more reliably — from day one.</p>
+      <div class="social-links">
+        <a href="#" class="social-link" aria-label="Twitter/X">𝕏</a>
+        <a href="https://discord.com/invite/clawd" class="social-link" aria-label="Discord" target="_blank">💬</a>
+        <a href="#" class="social-link" aria-label="GitHub">⌨</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Products</h4>
+      <ul>
+        <li><a href="#products">Mastery Course</a></li>
+        <li><a href="#products">Skills Pack</a></li>
+        <li><a href="#products">Template Kit</a></li>
+        <li><a href="#products">Setup Session</a></li>
+        <li><a href="#products">Custom Build</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="#how">How It Works</a></li>
+        <li><a href="#testimonials">Reviews</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Resources</h4>
+      <ul>
+        <li><a href="https://docs.openclaw.ai" target="_blank">OpenClaw Docs</a></li>
+        <li><a href="https://clawhub.com" target="_blank">ClawHub Skills</a></li>
+        <li><a href="https://discord.com/invite/clawd" target="_blank">Community Discord</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 ClawCraft. All rights reserved.</span>
+    <span class="powered">Powered by <a href="https://openclaw.ai" target="_blank">OpenClaw</a> 🤖</span>
+  </div>
+</footer>
+
+<!-- SCROLL TO TOP -->
+<button id="scrollTop" aria-label="Scroll to top">↑</button>
+
+<script>
+  // ── MOBILE MENU ──
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('open');
+    mobileMenu.classList.toggle('open');
+  });
+  document.querySelectorAll('.mobile-link').forEach(link => {
+    link.addEventListener('click', () => {
+      hamburger.classList.remove('open');
+      mobileMenu.classList.remove('open');
+    });
+  });
+
+  // ── SCROLL TO TOP ──
+  const scrollTopBtn = document.getElementById('scrollTop');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 400) scrollTopBtn.classList.add('show');
+    else scrollTopBtn.classList.remove('show');
+  });
+  scrollTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+  // ── INTERSECTION OBSERVER (card animations) ──
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.product-card, .testimonial-card, .step').forEach(el => observer.observe(el));
+
+  // ── FAQ ACCORDION ──
+  document.querySelectorAll('.faq-q').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.closest('.faq-item');
+      const isOpen = item.classList.contains('open');
+      // Close all
+      document.querySelectorAll('.faq-item').forEach(i => {
+        i.classList.remove('open');
+        i.querySelector('.faq-q').setAttribute('aria-expanded', 'false');
+      });
+      // Open clicked if was closed
+      if (!isOpen) {
+        item.classList.add('open');
+        btn.setAttribute('aria-expanded', 'true');
+      }
+    });
+  });
+
+  // ── PREFILL FORM ──
+  function prefillForm(value) {
+    const sel = document.getElementById('interest');
+    if (sel) sel.value = value;
+    document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+    return false;
+  }
+
+  // Handle product card links with prefill
+  document.querySelectorAll('.card-btn[onclick]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const match = btn.getAttribute('onclick').match(/prefillForm\('(.+?)'\)/);
+      if (match) prefillForm(match[1]);
+    });
+  });
+
+  // ── FORM VALIDATION & SUBMIT ──
+  const form = document.getElementById('contactForm');
+  const formSuccess = document.getElementById('formSuccess');
+
+  function showError(id, show) {
+    const errEl = document.getElementById(id + '-err');
+    const inputEl = document.getElementById(id);
+    if (show) {
+      errEl.classList.add('show');
+      inputEl.classList.add('error');
+    } else {
+      errEl.classList.remove('show');
+      inputEl.classList.remove('error');
+    }
+  }
+
+  function validateEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
+
+  // Live validation on blur
+  ['fname', 'email', 'interest', 'message'].forEach(id => {
+    const el = document.getElementById(id);
+    el.addEventListener('blur', () => {
+      if (id === 'email') showError(id, !validateEmail(el.value.trim()));
+      else showError(id, !el.value.trim());
+    });
+    el.addEventListener('input', () => {
+      el.classList.remove('error');
+      document.getElementById(id + '-err').classList.remove('show');
+    });
+  });
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    let valid = true;
+
+    const fname = document.getElementById('fname').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const interest = document.getElementById('interest').value;
+    const message = document.getElementById('message').value.trim();
+
+    if (!fname) { showError('fname', true); valid = false; }
+    else showError('fname', false);
+
+    if (!validateEmail(email)) { showError('email', true); valid = false; }
+    else showError('email', false);
+
+    if (!interest) { showError('interest', true); valid = false; }
+    else showError('interest', false);
+
+    if (!message) { showError('message', true); valid = false; }
+    else showError('message', false);
+
+    if (!valid) return;
+
+    // Submit via mailto fallback (replace with Formspree endpoint in production)
+    const submitBtn = document.getElementById('submitBtn');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending...';
+
+    // Simulate send (replace with actual fetch to Formspree)
+    const subject = encodeURIComponent(`ClawCraft Inquiry: ${interest}`);
+    const body = encodeURIComponent(`Name: ${fname}\nEmail: ${email}\nInterested in: ${interest}\n\nMessage:\n${message}`);
+
+    // Try mailto as fallback
+    window.location.href = `mailto:hello@clawcraft.ai?subject=${subject}&body=${body}`;
+
+    // Show success after brief delay
+    setTimeout(() => {
+      form.style.display = 'none';
+      formSuccess.classList.add('show');
+    }, 800);
+  });
+</script>
+</body>
+</html>
