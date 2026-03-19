@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+
+{% block extra_css %}
+<style>
+  .dash-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:2rem; flex-wrap:wrap; gap:1rem; }
+  .dash-header h1 { font-size:1.6rem; font-weight:800; }
+  .orders-table { width:100%; border-collapse:collapse; }
+  .orders-table th { text-align:left; font-size:.75rem; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:1px; padding:.75rem 1rem; border-bottom:1px solid var(--border); }
+  .orders-table td { padding:.75rem 1rem; font-size:.88rem; border-bottom:1px solid var(--border); color:var(--muted); }
+  .orders-table tr:hover td { background:rgba(255,255,255,.02); }
+  .status-badge { display:inline-block; padding:.2rem .6rem; border-radius:6px; font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.5px; }
+  .status-paid { background:rgba(0,230,118,.12); color:#00e676; }
+  .status-pending { background:rgba(255,193,7,.12); color:#ffc107; }
+  .status-refunded { background:rgba(255,77,77,.12); color:#ff6666; }
+  .empty { text-align:center; padding:3rem; color:var(--muted); }
+  .empty-icon { font-size:3rem; margin-bottom:1rem; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="dash-header">
+  <h1>👋 Hey, {{ current_user.name }}!</h1>
+  <a href="/#products" class="btn btn-r btn-sm">Browse Products</a>
+</div>
+
+<div class="card">
+  <h2 style="font-size:1.1rem; font-weight:700; margin-bottom:1rem;">Your Purchases</h2>
+  {% if orders %}
+  <div style="overflow-x:auto;">
+    <table class="orders-table">
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Amount</th>
+          <th>Status</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for o in orders %}
+        <tr>
+          <td style="color:var(--text); font-weight:600;">{{ o.product.icon }} {{ o.product.name }}</td>
+          <td>${{ '%.2f' % (o.amount_cents / 100) }}</td>
+          <td><span class="status-badge status-{{ o.status }}">{{ o.status }}</span></td>
+          <td>{{ o.created_at.strftime('%b %d, %Y') }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty">
+    <div class="empty-icon">🦞</div>
+    <p>No purchases yet. Check out our <a href="/#products">products</a> to get started!</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

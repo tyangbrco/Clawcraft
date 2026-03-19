@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %}{{ product.name }}{% endblock %}
+
+{% block extra_css %}
+<style>
+  .prod-hero { padding:3rem 0 2rem; }
+  .prod-top { display:grid; grid-template-columns:1fr 360px; gap:3rem; align-items:start; }
+  .prod-icon-big { font-size:3rem; width:72px; height:72px; border-radius:16px; background:rgba(255,77,77,.08); border:1px solid rgba(255,77,77,.15); display:flex; align-items:center; justify-content:center; margin-bottom:1.2rem; }
+  .prod-cat { font-size:.72rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--accent); margin-bottom:.5rem; }
+  .prod-h1 { font-size:2rem; font-weight:800; letter-spacing:-1px; margin-bottom:.75rem; }
+  .prod-short { color:var(--muted); font-size:1rem; line-height:1.7; margin-bottom:1.5rem; }
+
+  .sidebar { position:sticky; top:80px; }
+  .buy-card { background:var(--card); border:1px solid var(--border); border-radius:18px; padding:2rem; }
+  .buy-price { font-size:2.8rem; font-weight:900; margin-bottom:.25rem; }
+  .buy-price .c { font-size:1.4rem; color:var(--muted); vertical-align:super; }
+  .buy-price .per { font-size:.9rem; color:var(--muted); font-weight:500; }
+  .buy-feat { list-style:none; margin:1.5rem 0; display:flex; flex-direction:column; gap:.5rem; }
+  .buy-feat li { font-size:.87rem; color:var(--muted); display:flex; align-items:flex-start; gap:.5rem; }
+  .buy-feat li::before { content:'✓'; color:var(--green); font-weight:700; }
+  .buy-btn { display:block; width:100%; text-align:center; padding:.9rem; border-radius:10px; font-weight:700; font-size:.95rem; background:var(--accent); color:#fff; border:none; cursor:pointer; font-family:inherit; transition:all .2s; }
+  .buy-btn:hover { background:#ff3333; transform:translateY(-1px); box-shadow:0 8px 24px rgba(255,77,77,.3); }
+  .buy-note { font-size:.78rem; color:var(--dim); text-align:center; margin-top:.75rem; }
+
+  .prod-body { margin-top:3rem; padding-top:2rem; border-top:1px solid var(--border); }
+  .prod-desc { color:var(--muted); font-size:.92rem; line-height:1.8; max-width:750px; }
+  .prod-desc strong { color:var(--text); }
+  .prod-desc ul { margin-left:1.2rem; margin-bottom:1rem; }
+  .prod-desc li { margin-bottom:.4rem; }
+  .prod-desc p { margin-bottom:1rem; }
+  .prod-desc h3, .prod-desc h4 { color:var(--text); }
+
+  @media(max-width:800px) {
+    .prod-top { grid-template-columns:1fr; }
+    .sidebar { position:static; }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="prod-hero">
+  <a href="/#products" style="color:var(--muted); font-size:.85rem;">← Back to all products</a>
+  <div class="prod-top" style="margin-top:1.5rem;">
+    <div>
+      <div class="prod-icon-big">{{ product.icon }}</div>
+      <div class="prod-cat">{{ product.category }}</div>
+      <h1 class="prod-h1">{{ product.name }}</h1>
+      <p class="prod-short">{{ product.short_desc }}</p>
+    </div>
+    <div class="sidebar">
+      <div class="buy-card">
+        <div class="buy-price">
+          <span class="c">$</span>{{ product.price_cents // 100 }}{% if product.category == 'custom' %}+{% endif %}
+          <span class="per">{% if product.category == 'session' %} / session{% elif product.category == 'custom' %} / project{% else %} one-time{% endif %}</span>
+        </div>
+        <ul class="buy-feat">
+          {% for f in product.features_list %}
+          <li>{{ f }}</li>
+          {% endfor %}
+        </ul>
+        {% if current_user.is_authenticated %}
+          <form action="{{ url_for('buy_product', slug=product.slug) }}" method="POST">
+            <button type="submit" class="buy-btn">
+              {% if product.category == 'session' %}Book Now 🦞{% elif product.category == 'custom' %}Request Quote 🦞{% else %}Buy Now 🦞{% endif %}
+            </button>
+          </form>
+        {% else %}
+          <a href="{{ url_for('signup') }}?next={{ url_for('product_detail', slug=product.slug) }}" class="buy-btn" style="display:block; text-decoration:none; color:#fff; text-align:center;">
+            Sign Up to Purchase 🦞
+          </a>
+        {% endif %}
+        <p class="buy-note">7-day money-back guarantee · Instant access</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="prod-body">
+    <div class="prod-desc">
+      {{ product.description | replace('\n\n', '</p><p>') | replace('\n', '<br>') | replace('**', '<strong>') | safe }}
+    </div>
+  </div>
+</div>
+{% endblock %}

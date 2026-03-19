@@ -1,0 +1,180 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+
+{% block extra_css %}
+<style>
+  /* Override main padding for homepage */
+  main > div { max-width:100%!important; padding:0!important; }
+
+  .hero { min-height:92vh; display:flex; align-items:center; justify-content:center; text-align:center; padding:6rem 6% 4rem; position:relative; overflow:hidden; }
+  .hero-bg { position:absolute; inset:0; background: radial-gradient(ellipse 70% 55% at 50% -10%,rgba(255,77,77,.12) 0%,transparent 65%),radial-gradient(ellipse 40% 30% at 85% 85%,rgba(255,122,61,.07) 0%,transparent 60%); }
+  .hero-grid { position:absolute; inset:0; background-image:linear-gradient(#1a2540 1px,transparent 1px),linear-gradient(90deg,#1a2540 1px,transparent 1px); background-size:50px 50px; opacity:.2; mask-image:radial-gradient(ellipse 75% 75% at 50% 50%,black,transparent); }
+  .claw-deco { position:absolute; font-size:8rem; opacity:.04; pointer-events:none; user-select:none; }
+  .claw-deco.l { left:-2rem; top:30%; transform:rotate(-30deg); }
+  .claw-deco.r { right:-2rem; top:20%; transform:rotate(20deg) scaleX(-1); }
+  .hero-content { position:relative; z-index:1; max-width:820px; }
+  .badge { display:inline-flex; align-items:center; gap:.5rem; background:rgba(255,77,77,.1); border:1px solid rgba(255,77,77,.3); color:var(--accent); padding:.4rem 1rem; border-radius:50px; font-size:.78rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; margin-bottom:2rem; }
+  .hero h1 { font-size:clamp(2.6rem,6vw,4.5rem); font-weight:900; line-height:1.06; letter-spacing:-2px; margin-bottom:1.5rem; }
+  .hero h1 .gr { background:linear-gradient(135deg,#fff 0%,#ff7a3d 45%,#ff2222 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+  .hero-sub { font-size:clamp(.95rem,1.8vw,1.1rem); color:var(--muted); max-width:530px; margin:0 auto 2.5rem; line-height:1.75; }
+  .hero-actions { display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; }
+  .hero-stats { display:flex; justify-content:center; margin-top:4rem; padding-top:3rem; border-top:1px solid var(--border); flex-wrap:wrap; }
+  .stat { text-align:center; padding:0 2.5rem; border-right:1px solid var(--border); }
+  .stat:last-child { border-right:none; }
+  .stat-n { font-size:1.8rem; font-weight:800; color:var(--accent); display:block; }
+  .stat-l { font-size:.75rem; color:var(--muted); text-transform:uppercase; letter-spacing:1px; }
+
+  /* Products */
+  #products { padding:5rem 6%; background:var(--bg2); }
+  .sec-label { text-align:center; font-size:.72rem; font-weight:700; letter-spacing:2.5px; text-transform:uppercase; color:var(--accent); margin-bottom:.75rem; }
+  .sec-title { text-align:center; font-size:clamp(1.7rem,3.5vw,2.5rem); font-weight:800; letter-spacing:-1px; margin-bottom:.75rem; }
+  .sec-sub { text-align:center; color:var(--muted); font-size:.92rem; max-width:460px; margin:0 auto 3rem; }
+  .pricing { display:grid; grid-template-columns:repeat(5,1fr); gap:1.2rem; max-width:1300px; margin:0 auto; align-items:start; }
+  .p-card { background:var(--card); border:1px solid var(--border); border-radius:18px; padding:1.6rem 1.4rem; display:flex; flex-direction:column; position:relative; overflow:hidden; opacity:0; transform:translateY(20px); transition:all .5s; }
+  .p-card.vis { opacity:1; transform:translateY(0); }
+  .p-card:hover { border-color:rgba(255,77,77,.3); transform:translateY(-4px); box-shadow:0 16px 40px rgba(0,0,0,.5); }
+  .p-card::after { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,var(--accent2),var(--accent-o)); opacity:0; transition:opacity .25s; }
+  .p-card:hover::after { opacity:1; }
+  .p-card.feat { border-color:rgba(255,77,77,.4); background:linear-gradient(160deg,#141c2e,#0e1422); }
+  .p-card.feat::after { opacity:1; }
+  .feat-badge { position:absolute; top:.8rem; right:.8rem; background:linear-gradient(135deg,var(--accent2),var(--accent-o)); color:#fff; font-size:.63rem; font-weight:700; padding:.2rem .6rem; border-radius:50px; text-transform:uppercase; letter-spacing:.6px; }
+  .p-icon { font-size:1.8rem; width:48px; height:48px; border-radius:11px; background:rgba(255,77,77,.08); border:1px solid rgba(255,77,77,.15); display:flex; align-items:center; justify-content:center; margin-bottom:.8rem; }
+  .p-price { font-size:2rem; font-weight:900; line-height:1; margin-bottom:.15rem; }
+  .p-price .c { font-size:1rem; font-weight:600; color:var(--muted); vertical-align:super; }
+  .p-price .per { font-size:.8rem; font-weight:500; color:var(--muted); }
+  .p-name { font-size:.95rem; font-weight:700; margin:.6rem 0 .5rem; }
+  .p-desc { color:var(--muted); font-size:.8rem; line-height:1.6; margin-bottom:1rem; flex:1; }
+  .p-feat { list-style:none; margin-bottom:1.2rem; display:flex; flex-direction:column; gap:.35rem; }
+  .p-feat li { font-size:.8rem; color:var(--muted); display:flex; align-items:flex-start; gap:.45rem; }
+  .p-feat li::before { content:'✓'; color:var(--green); font-weight:700; flex-shrink:0; }
+  .p-btn { display:block; text-align:center; width:100%; padding:.7rem; border-radius:9px; font-weight:700; font-size:.85rem; cursor:pointer; border:none; font-family:inherit; transition:all .2s; text-decoration:none!important; margin-top:auto; }
+  .p-btn-f { background:var(--accent); color:#fff; }
+  .p-btn-f:hover { background:#ff3333; }
+  .p-btn-g { background:transparent; color:var(--accent); border:1px solid rgba(255,77,77,.35); }
+  .p-btn-g:hover { background:rgba(255,77,77,.08); }
+
+  .lob-div { text-align:center; padding:1.5rem 0; font-size:2.5rem; opacity:.1; user-select:none; letter-spacing:1rem; }
+
+  /* FAQ */
+  #faq { padding:5rem 6%; }
+  .faq-list { max-width:700px; margin:0 auto; display:flex; flex-direction:column; gap:.6rem; }
+  .faq-i { background:var(--card); border:1px solid var(--border); border-radius:var(--r); overflow:hidden; }
+  .faq-i.open { border-color:rgba(255,77,77,.3); }
+  .faq-q { width:100%; background:none; border:none; display:flex; align-items:center; justify-content:space-between; padding:1rem 1.3rem; cursor:pointer; color:var(--text); font-size:.88rem; font-weight:600; text-align:left; gap:1rem; font-family:inherit; }
+  .faq-q:hover { color:var(--accent); }
+  .faq-ic { width:20px; height:20px; border-radius:50%; background:rgba(255,77,77,.1); display:flex; align-items:center; justify-content:center; font-size:.72rem; color:var(--accent); transition:transform .3s; flex-shrink:0; }
+  .faq-i.open .faq-ic { transform:rotate(45deg); }
+  .faq-a { max-height:0; overflow:hidden; transition:max-height .35s,padding .3s; color:var(--muted); font-size:.85rem; line-height:1.7; padding:0 1.3rem; }
+  .faq-i.open .faq-a { max-height:300px; padding:0 1.3rem 1.2rem; }
+
+  /* CTA */
+  .cta-section { padding:5rem 6%; text-align:center; background:var(--bg2); }
+  .cta-section h2 { margin-bottom:1rem; }
+
+  @media(max-width:1100px) { .pricing { grid-template-columns:repeat(3,1fr); } }
+  @media(max-width:760px) { .pricing { grid-template-columns:1fr 1fr; } .stat { padding:0 1.5rem; } }
+  @media(max-width:520px) { .pricing { grid-template-columns:1fr; } .hero-actions { flex-direction:column; align-items:center; } }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="claw-deco l">🦞</div>
+  <div class="claw-deco r">🦞</div>
+  <div class="hero-content">
+    <div class="badge">🦞 &nbsp;OpenClaw Experts</div>
+    <h1>Build Smarter Agents.<br><span class="gr">Automate Everything.</span></h1>
+    <p class="hero-sub">Stop wrestling with configs and broken scripts. ClawCraft gives you the skills, templates, and expert guidance to master OpenClaw.</p>
+    <div class="hero-actions">
+      <a href="#products" class="btn btn-r">See Pricing 🦞</a>
+      {% if not current_user.is_authenticated %}
+        <a href="{{ url_for('signup') }}" class="btn btn-o">Create Account</a>
+      {% else %}
+        <a href="{{ url_for('dashboard') }}" class="btn btn-o">My Dashboard</a>
+      {% endif %}
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-n">500+</span><span class="stat-l">Agents Built</span></div>
+      <div class="stat"><span class="stat-n">200+</span><span class="stat-l">Students</span></div>
+      <div class="stat"><span class="stat-n">50+</span><span class="stat-l">Skills Published</span></div>
+      <div class="stat"><span class="stat-n">4.9★</span><span class="stat-l">Avg Rating</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+<section id="products">
+  <p class="sec-label">Pricing</p>
+  <h2 class="sec-title">Pick Your Plan</h2>
+  <p class="sec-sub">From starter templates to custom agent builds — priced for every stage.</p>
+  <div class="pricing">
+    {% for p in products %}
+    <div class="p-card{% if p.slug == 'mastery-course' %} feat{% endif %}">
+      {% if p.slug == 'mastery-course' %}<div class="feat-badge">Most Popular</div>{% endif %}
+      <div class="p-icon">{{ p.icon }}</div>
+      <div class="p-price"><span class="c">$</span>{{ (p.price_cents // 100) }}<span class="per">{% if p.category == 'session' %} / session{% elif p.category == 'custom' %}+ / project{% else %} one-time{% endif %}</span></div>
+      <div class="p-name">{{ p.name }}</div>
+      <p class="p-desc">{{ p.short_desc }}</p>
+      <ul class="p-feat">
+        {% for f in p.features_list[:6] %}
+        <li>{{ f }}</li>
+        {% endfor %}
+      </ul>
+      <a href="{{ url_for('product_detail', slug=p.slug) }}" class="p-btn {% if p.slug in ['mastery-course','custom-agent-build'] %}p-btn-f{% else %}p-btn-g{% endif %}">
+        {% if p.category == 'session' %}Book a Session →{% elif p.category == 'custom' %}Request Quote →{% else %}Learn More →{% endif %}
+      </a>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<div class="lob-div" aria-hidden="true">🦞 🦞 🦞 🦞 🦞</div>
+
+<!-- FAQ -->
+<section id="faq">
+  <p class="sec-label">Questions</p>
+  <h2 class="sec-title">Frequently Asked Questions</h2>
+  <p class="sec-sub">Everything you need to know before getting started.</p>
+  <div class="faq-list">
+    <div class="faq-i"><button class="faq-q">What is OpenClaw? <span class="faq-ic">+</span></button><div class="faq-a">OpenClaw is a personal AI agent platform that runs on your own hardware. It lets you create AI agents that can browse the web, send messages, run automations, manage files, and schedule tasks — all privately, on your own machine.</div></div>
+    <div class="faq-i"><button class="faq-q">Do I need technical experience? <span class="faq-ic">+</span></button><div class="faq-a">Not necessarily. The Template Starter Kit is designed for anyone who can follow instructions. For beginners, we recommend a 1-on-1 Setup Session. The Mastery Course covers both beginner and advanced topics.</div></div>
+    <div class="faq-i"><button class="faq-q">What's included in the Mastery Course? <span class="faq-ic">+</span></button><div class="faq-a">8 modules: Setup & config, skills system, sub-agents, cron scheduling, browser automation, API integrations, production deployment, and hands-on projects. Lifetime access with all future updates.</div></div>
+    <div class="faq-i"><button class="faq-q">Can I get a refund? <span class="faq-ic">+</span></button><div class="faq-a">Yes. All digital products come with a 7-day money-back guarantee. For 1-on-1 sessions, cancel 24+ hours before for a full refund. Custom builds have a satisfaction guarantee.</div></div>
+    <div class="faq-i"><button class="faq-q">How does the setup session work? <span class="faq-ic">+</span></button><div class="faq-a">Book a slot via our calendar link. We meet via video call for 60 minutes, work on your actual setup, and you get a recording afterward plus 1 week of async support.</div></div>
+    <div class="faq-i"><button class="faq-q">What can custom agents do? <span class="faq-ic">+</span></button><div class="faq-a">Almost anything: social media automation, email monitoring, financial tracking, customer support, content generation, server monitoring, lead generation, and personal productivity setups.</div></div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <h2 class="sec-title">Ready to Build? 🦞</h2>
+  <p class="sec-sub">Join hundreds of OpenClaw users who've leveled up their agent game.</p>
+  {% if not current_user.is_authenticated %}
+    <a href="{{ url_for('signup') }}" class="btn btn-r">Create Free Account →</a>
+  {% else %}
+    <a href="#products" class="btn btn-r">Browse Products →</a>
+  {% endif %}
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  // Card animations
+  const io = new IntersectionObserver(entries => {
+    entries.forEach((e,i) => { if(e.isIntersecting) { setTimeout(()=>e.target.classList.add('vis'), i*80); io.unobserve(e.target); }});
+  }, {threshold:.08});
+  document.querySelectorAll('.p-card').forEach(el => io.observe(el));
+  // FAQ
+  document.querySelectorAll('.faq-q').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.closest('.faq-i');
+      const open = item.classList.contains('open');
+      document.querySelectorAll('.faq-i').forEach(i => i.classList.remove('open'));
+      if(!open) item.classList.add('open');
+    });
+  });
+</script>
+{% endblock %}

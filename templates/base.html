@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}ClawCraft{% endblock %} — Master AI Agents</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #06090f; --bg2: #0a0f1a; --bg3: #0e1522;
+      --card: #101824; --border: #1a2540; --border-l: #233050;
+      --accent: #ff4d4d; --accent2: #ff2222; --accent-o: #ff7a3d;
+      --text: #e8edf5; --muted: #6b829e; --dim: #3a5070;
+      --green: #00e676; --gold: #ffc107; --r: 14px;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+    a { color:var(--accent); text-decoration:none; }
+    a:hover { text-decoration:underline; }
+
+    /* Nav */
+    nav { position:fixed; top:0; left:0; right:0; z-index:200; display:flex; align-items:center; justify-content:space-between; padding:0 6%; height:64px; background:rgba(6,9,15,0.92); backdrop-filter:blur(20px); border-bottom:1px solid var(--border); }
+    .logo { display:flex; align-items:center; gap:.5rem; font-size:1.3rem; font-weight:800; color:var(--text); text-decoration:none; }
+    .logo:hover { text-decoration:none; }
+    .logo .claw { font-size:1.5rem; }
+    .logo .g { background:linear-gradient(90deg,#ff4d4d,#ff7a3d); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+    .nav-links { display:flex; gap:1.5rem; list-style:none; align-items:center; }
+    .nav-links a { color:var(--muted); font-size:.88rem; font-weight:500; }
+    .nav-links a:hover { color:var(--text); text-decoration:none; }
+    .nav-btn { background:var(--accent); color:#fff!important; padding:.45rem 1.1rem; border-radius:8px; font-weight:700!important; font-size:.83rem!important; }
+    .nav-btn:hover { opacity:.85; }
+    .nav-user { display:flex; align-items:center; gap:.5rem; color:var(--muted); font-size:.85rem; }
+    .nav-user strong { color:var(--text); }
+
+    /* Main */
+    main { padding-top:64px; min-height:80vh; }
+
+    /* Buttons */
+    .btn { display:inline-flex; align-items:center; gap:.5rem; padding:.75rem 1.5rem; border-radius:10px; font-weight:700; font-size:.9rem; cursor:pointer; border:none; font-family:inherit; transition:all .2s; text-decoration:none!important; }
+    .btn-r { background:var(--accent); color:#fff; }
+    .btn-r:hover { background:#ff3333; transform:translateY(-1px); box-shadow:0 6px 20px rgba(255,77,77,.3); }
+    .btn-o { background:transparent; color:var(--accent); border:1px solid rgba(255,77,77,.35); }
+    .btn-o:hover { background:rgba(255,77,77,.08); }
+    .btn-sm { padding:.5rem 1rem; font-size:.82rem; border-radius:8px; }
+    .btn-green { background:var(--green); color:#000; }
+    .btn-green:hover { opacity:.85; }
+
+    /* Cards */
+    .card { background:var(--card); border:1px solid var(--border); border-radius:var(--r); padding:1.5rem; }
+
+    /* Flash messages */
+    .flash { padding:.8rem 1.2rem; border-radius:10px; margin-bottom:1rem; font-size:.88rem; font-weight:500; }
+    .flash-success { background:rgba(0,230,118,.1); border:1px solid rgba(0,230,118,.3); color:#00e676; }
+    .flash-error { background:rgba(255,77,77,.1); border:1px solid rgba(255,77,77,.3); color:#ff6666; }
+    .flash-info { background:rgba(61,139,255,.1); border:1px solid rgba(61,139,255,.3); color:#3d8bff; }
+
+    /* Forms */
+    .form-group { margin-bottom:1rem; }
+    .form-group label { display:block; font-size:.8rem; font-weight:600; margin-bottom:.4rem; color:var(--muted); text-transform:uppercase; letter-spacing:.5px; }
+    .form-group input, .form-group textarea, .form-group select { width:100%; background:var(--bg3); border:1px solid var(--border); border-radius:9px; padding:.75rem 1rem; color:var(--text); font-size:.9rem; font-family:inherit; outline:none; transition:border-color .2s; }
+    .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color:var(--accent); }
+
+    /* Footer */
+    footer { background:var(--bg2); border-top:1px solid var(--border); padding:2rem 6%; text-align:center; color:var(--dim); font-size:.82rem; }
+    footer a { color:var(--dim); }
+
+    /* Responsive */
+    .hamburger { display:none; flex-direction:column; gap:4px; cursor:pointer; }
+    .hamburger span { width:20px; height:2px; background:var(--text); border-radius:2px; }
+    @media(max-width:700px) {
+      .nav-links { display:none; }
+      .hamburger { display:flex; }
+    }
+  </style>
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+  <nav>
+    <a href="/" class="logo"><span class="claw">🦞</span><span class="g">Claw</span>Craft</a>
+    <ul class="nav-links">
+      <li><a href="/#products">Pricing</a></li>
+      <li><a href="/#faq">FAQ</a></li>
+      {% if current_user.is_authenticated %}
+        <li class="nav-user">👤 <strong>{{ current_user.name }}</strong></li>
+        <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+        {% if current_user.is_admin %}<li><a href="{{ url_for('admin_dashboard') }}" style="color:#ffc107">Admin</a></li>{% endif %}
+        <li><a href="{{ url_for('logout') }}" class="nav-btn">Logout</a></li>
+      {% else %}
+        <li><a href="{{ url_for('login') }}">Login</a></li>
+        <li><a href="{{ url_for('signup') }}" class="nav-btn">Sign Up</a></li>
+      {% endif %}
+    </ul>
+    <div class="hamburger" onclick="document.querySelector('.nav-links').style.display=document.querySelector('.nav-links').style.display==='flex'?'none':'flex'">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+  <main>
+    <div style="max-width:1200px; margin:0 auto; padding:2rem 4%;">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for cat, msg in messages %}
+          <div class="flash flash-{{ cat }}">{{ msg }}</div>
+        {% endfor %}
+      {% endwith %}
+      {% block content %}{% endblock %}
+    </div>
+  </main>
+  <footer>
+    <p>© 2026 ClawCraft 🦞 · Powered by <a href="https://openclaw.ai" target="_blank">OpenClaw</a></p>
+  </footer>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

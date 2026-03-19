@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Log In{% endblock %}
+{% block content %}
+<div style="max-width:420px; margin:3rem auto;">
+  <h1 style="font-size:1.8rem; font-weight:800; text-align:center; margin-bottom:.5rem;">Welcome Back 🦞</h1>
+  <p style="text-align:center; color:var(--muted); margin-bottom:2rem; font-size:.9rem;">Log in to your ClawCraft account.</p>
+  <div class="card">
+    <form method="POST">
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" name="email" placeholder="alex@example.com" required />
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="Your password" required />
+      </div>
+      <button type="submit" class="btn btn-r" style="width:100%; justify-content:center; margin-top:.5rem;">Log In →</button>
+    </form>
+  </div>
+  <p style="text-align:center; color:var(--muted); font-size:.85rem; margin-top:1.5rem;">
+    Don't have an account? <a href="{{ url_for('signup') }}">Sign up</a>
+  </p>
+</div>
+{% endblock %}
